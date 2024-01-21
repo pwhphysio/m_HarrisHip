@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Dizziness Handicap Inventory</title>
+	<meta http-equiv="Content-Language" content="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Harris Hip Score Calculator</title>
 	<style>
 		@font-face{
 			font-family: 'Source Code Pro';
@@ -13,13 +15,19 @@
 				url('./OTF/SourceCodePro-Light.otf') format('opentype'),
 				url('./TTF/SourceCodePro-Light.ttf') format('truetype');
 		}
-
-		Legend{
-			font-weight: bold;
-			font-size: 35px;
+		/*
+		body {
+			margin: 0;
 		}
+
+		div {
+			width: 100vw;
+			height: 100vh;
+		}
+		*/
+
 		html {
-    		background-color: rgb(208, 219, 233);
+        background-color: rgb(208, 219, 233);
       	}
 
 		h1 {
@@ -164,7 +172,7 @@
 			font-size: 30px;
 			text-align: center;
 			max-width: 100%;
-			width: 80%;
+			width: 70%;
  		 	max-height: 80%;
   			overflow: auto;
 		}
@@ -185,36 +193,14 @@
 			padding: 9px 15px;
 			border-radius: 13px;
 		}
-		
-		
-		
-		#p_result {
-			margin-top: 20px;
-			font-size: 30px;
-			font-weight: bold;
-			text-align: center;
-		}
-
-		#E_result {
-			font-size: 30px;
-			font-weight: bold;
-			text-align: center;
-		}
-
-		#F_result {
-			font-size: 30px;
-			font-weight: bold;
-			text-align: center;
-		}
-
 		#create {
 			text-align: right; /* Align text to the right side of its container */
  			color: rgb(118, 113, 113); /* Set the text color to light grey */
 			font-size: 20px;
 			line-height: 1;
 		}
-		
-		
+
+
         /* for design for mobile version*/
 		form {
 			font-size: 60px;
@@ -248,24 +234,12 @@
             margin-right: 65px;
             margin-top: 20px;
         }
-
-        #p_result {
+        #result {
             margin-top: 40px;
             font-size: 60px;
             font-weight: bold;
-		}
+        }
 
-		#E_result {
-            margin-top: 40px;
-            font-size: 60px;
-            font-weight: bold;
-		}
-
-		#F_result {
-            margin-top: 40px;
-            font-size: 60px;
-            font-weight: bold;
-		}
         input[type="reset"] {
 			transform: scale(2);
 		}
@@ -274,6 +248,9 @@
             margin-left: 200px;
 
 		}
+        #popup {
+            width: 80%;
+        }
         .popup-button {
 			margin-top: 10px;
 			padding: 9px 15px;
@@ -289,11 +266,12 @@
 		#create{
 			font-size: 30px;
 		}
+		
 
 
 	</style>
-	<script text="text/javascript">
-        function showPopup(message) {
+	<script type="text/javascript">
+		function showPopup(message) {
 			var popup = document.getElementById("popup");
 			var messageElement = popup.querySelector(".popup-message");
 			messageElement.innerHTML = message;
@@ -303,124 +281,67 @@
 
 		function hidePopup(popup) {
 			popup.style.display = "none";
-        
-        }
-
-		function runALLFunctions() {
-			calculatePscore(event);
-			calculateEscore(event);
-			calculateFscore(event);
-            totalpopup();
 		}
 
-        var totalPquestions = 0;
-		var totalPscore = 0;
-		var PAINscore = 0;
 
-		function calculatePscore(event) {
+		function calculateQuickDASH(event) {
 			event.preventDefault(); // Prevent form submission
 			
-			var values = document.getElementsByClassName("p_score");
-			totalPquestions = 0;
-			totalPscore = 0;
-			PAINscore = 0;
-
+			var values = document.getElementsByClassName("score");
+			var totalScore = 0;
+			var totalQuestions = 0;
 			for(var i = 0; i < values.length; i++) {
 				if(values[i].checked) {
-					totalPscore += parseFloat(values[i].value);
-					totalPquestions++;
+					totalScore += parseFloat(values[i].value);
+					totalQuestions++;
 				}
 			}
-		}
 
-        var totalEquestions = 0;
-		var totalEscore = 0;
-		var ADLscore = 0;
-
-		function calculateEscore(event) {
-			event.preventDefault(); // Prevent form submission
-			
-			var values = document.getElementsByClassName("e_score");
-			totalEquestions = 0;
-			totalEscore = 0;
-			ADLscore = 0;
-
-			for(var i = 0; i < values.length; i++) {
-				if(values[i].checked) {
-					totalEscore += parseFloat(values[i].value);
-					totalEquestions++;
-				}
-			}
-		}
-
-        var totalFquestions = 0;
-		var totalFscore = 0;
-		var QOLscore = 0;
-
-		function calculateFscore() {
-			event.preventDefault(); // Prevent form submission
-			
-			var values = document.getElementsByClassName("f_score");
-			totalFquestions = 0;
-			totalFscore = 0;
-			QOLscore = 0;
-
-			for(var i = 0; i < values.length; i++) {
-				if(values[i].checked) {
-					totalFscore += parseFloat(values[i].value);
-					totalFquestions++;
-				}
-			}
-		}
-
-        function totalpopup() {
-			var totalnumberofquestions = totalPquestions + totalEquestions + totalFquestions;
-
-            var totalScore = totalEscore + totalFscore + totalPscore;
-
-			if (totalnumberofquestions >= 25){
-				document.getElementById("p_result").innerHTML = "非常感謝您完成了這份調查中所有的問題<br><br>請勿關閉此頁面，並將你的分數寫在卡上，然後交給物理治療師。<br><br> 你第一部分(P)的分數是: " + Math.round(totalPscore) + "/28";
-
-				document.getElementById("F_result").innerHTML = "你第二部分(F)的分數是: " + Math.round(totalFscore) + "/32";
-			
-				document.getElementById("E_result").innerHTML = "你第三部分(E)的分數是: " + Math.round(totalEscore) + "/40 <br> Total: " + totalScore + "/100";
-
-				var popup = showPopup("非常感謝您完成了這份調查中所有的問題<br><br>請勿關閉此頁面，並將你的分數寫在卡上，然後交給物理治療師。<br><br> 你第一部分(P)的分數是: " + Math.round(totalPscore) + "/28 <br>"
-				+ "你第二部分(F)的分數是: " + Math.round(totalFscore) + "/32<br>"
-				+ "你第三部分(E)的分數是: " + Math.round(totalEscore) + "/40 <br> Total: " + totalScore + "/100"
-				);
+			if (totalQuestions >= 8){
+				var quickDASHscore = totalScore;
+				document.getElementById("result").innerHTML = "非常感謝您完成了這份調查中所有的問題<br><br>請勿關閉此頁面，並將以下資料展示給物理治療師。<br><br> Your Harris Hip score is: " + quickDASHscore;
+				var popup = showPopup("非常感謝您完成了這份調查中所有的問題<br><br>請勿關閉此頁面，並將以下資料展示給物理治療師。<br><br> Your Total Score is: " + quickDASHscore);
 			} else {
-				var failpopupcontent = "";
-
-                document.getElementById("p_result").innerHTML = "你尚有" + (25 - totalnumberofquestions)+ "條問題未回答<br>";
-                failpopupcontent += "你尚有" + (25 - totalnumberofquestions)+ "條問題未回答。<br>";
-
-
-				failpopupcontent += "請返回並繼續作答。"
-
-				var popup = showPopup(failpopupcontent);
-
-
-
+				document.getElementById("result").innerHTML = "你尚有" + (8 - totalQuestions)+ "條問題未回答<br>";
+				var popup = showPopup("你尚有" + (8 - totalQuestions)+ "條問題未回答。<br>請返回並繼續作答。");
 			}
-
+			
+			
 			var okButton = popup.querySelector(".popup-button");
 			okButton.addEventListener("click", function() {
 				hidePopup(popup);
 			});
+
+			
 		}
 
 		function resetContent() {
-    		document.getElementById("p_result").innerHTML = "";
-			document.getElementById("E_result").innerHTML = "";
-			document.getElementById("F_result").innerHTML = "";
+    		document.getElementById("result").innerHTML = "";
 		}
+		
+		/*
+		function calculateQuickDASH() {
+			var values = document.getElementsByClassName("score");
+			var totalScore = 0;
+			var totalQuestions = 0;
+			for(var i = 0; i < values.length; i++) {
+				if(values[i].checked) {
+					totalScore += parseFloat(values[i].value);
+					totalQuestions++;
+				}
+			}
+
+            var quickDASHscore = totalScore;
+            document.getElementById("result").innerHTML = "請勿關閉此頁面，並將以下資料展示給物理治療師。<br> Your Harris Hip Score is: " + quickDASHscore ;
+				
+		}
+		*/
 	</script>
 </head>
 <body>
     <br><br><br><br><br><br>
-	<h1> Dizziness Handicap Inventory 暈眩障礙紀錄</h1>
-    <button class = "increase-font-size-btn" id="increase-font-button">大
+	<h1>Chinese version of Harris Hip Score </h1>
+	<button class = "increase-font-size-btn" id="increase-font-button">大
     </button>
 
     <script>
@@ -487,134 +408,99 @@
 		});
 
     </script>
-    <h2> 新界東醫院聯網 物理治療部</h2>
+	
+	<h2> 新界東醫院聯網 物理治療部</h2>
 	<form>
-		病人須知:<br>
-		此量度評估是用作辨明你的暈眩(Dizziness)或身體不穩定(Unsteadiness)而或會體驗到的困難，請以「會」、「不會」或「有時會」來回答下列問題。
-		<br><br>
-		<p>P1 把眼睛往上望會不會使問題惡化?</p>
-        <input type="radio" name="section1" value="4" class="p_score"> 會<br>
-        <input type="radio" name="section1" value="0" class="p_score"> 不會<br>
-        <input type="radio" name="section1" value="2" class="p_score"> 有時會
-        <br><br><p>E2 這問題會不會使你感到灰心失意?</p>
-        <input type="radio" name="section2" value="4" class="e_score"> 會<br>
-        <input type="radio" name="section2" value="0" class="e_score"> 不會<br>
-        <input type="radio" name="section2" value="2" class="e_score"> 有時會
-        <br><br><p>F3 你會不會因為這問題而限制自己的商務遠行或康樂活動?</p>
-        <input type="radio" name="section3" value="4" class="f_score"> 會<br>
-        <input type="radio" name="section3" value="0" class="f_score"> 不會<br>
-        <input type="radio" name="section3" value="2" class="f_score"> 有時會
-        <br><br><p>P4 在超級市場的通道行走會不會使問題惡化?</p>
-        <input type="radio" name="section4" value="4" class="p_score"> 會<br>
-        <input type="radio" name="section4" value="0" class="p_score"> 不會<br>
-        <input type="radio" name="section4" value="2" class="p_score"> 有時會
-        <br><br><p>F5 這問題會不會使你難於上床或下床?</p>
-        <input type="radio" name="section5" value="4" class="f_score"> 會<br>
-        <input type="radio" name="section5" value="0" class="f_score"> 不會<br>
-        <input type="radio" name="section5" value="2" class="f_score"> 有時會
-        <br><br><p>F6 這問題會不會限制你參與各種社交活動，例如:外出用膳、外
-            出看電影、跳舞或參加舞會?</p>
-        <input type="radio" name="section6" value="4" class="f_score"> 會<br>
-        <input type="radio" name="section6" value="0" class="f_score"> 不會<br>
-        <input type="radio" name="section6" value="2" class="f_score"> 有時會
-        <br><br><p>F7 這問題會不會使你難於閱讀?</p>
-        <input type="radio" name="section7" value="4" class="f_score"> 會<br>
-        <input type="radio" name="section7" value="0" class="f_score"> 不會<br>
-        <input type="radio" name="section7" value="2" class="f_score"> 有時會
-        <br><br><p>P8 進行運動跳舞或家務雜活(例如:打掃或收拾碗碟)等較有難度
-            的活動會不會使問題惡化?</p>
-        <input type="radio" name="section8" value="4" class="p_score"> 會<br>
-        <input type="radio" name="section8" value="0" class="p_score"> 不會<br>
-        <input type="radio" name="section8" value="2" class="p_score"> 有時會
-        <br><br><p>E9 問題會不會使你害怕單獨離家外出?</p>
-        <input type="radio" name="section9" value="4" class="e_score"> 會<br>
-        <input type="radio" name="section9" value="0" class="e_score"> 不會<br>
-        <input type="radio" name="section9" value="2" class="e_score"> 有時會
-        <br><br><p>E10 這問題有沒有曾經使你在別人面前感到難堪?</p>
-        <input type="radio" name="section10" value="4" class="e_score"> 有<br>
-        <input type="radio" name="section10" value="0" class="e_score"> 沒有<br>
-        <input type="radio" name="section10" value="2" class="e_score"> 有時有
-        <br><br><p>P11 快速移動頭部會不會使問題惡化?</p>
-        <input type="radio" name="section11" value="4" class="p_score"> 會<br>
-        <input type="radio" name="section11" value="0" class="p_score"> 不會<br>
-        <input type="radio" name="section11" value="2" class="p_score"> 有時會
-        <br><br><p>F12 這問題會不會使你有畏高的情況?</p>
-        <input type="radio" name="section12" value="4" class="f_score"> 會<br>
-        <input type="radio" name="section12" value="0" class="f_score"> 不會<br>
-        <input type="radio" name="section12" value="2" class="f_score"> 有時會
-        <br><br><p>P13 在床上翻轉身體會不會使問題惡化?</p>
-        <input type="radio" name="section13" value="4" class="p_score"> 會<br>
-        <input type="radio" name="section13" value="0" class="p_score"> 不會<br>
-        <input type="radio" name="section13" value="2" class="p_score"> 有時會
-        <br><br><p>F14 這問題會不會使你難於處理消耗體力的家務或園務?</p>
-        <input type="radio" name="section14" value="4" class="f_score"> 會<br>
-        <input type="radio" name="section14" value="0" class="f_score"> 不會<br>
-        <input type="radio" name="section14" value="2" class="f_score"> 有時會
-        <br><br><p>E15 你會不會因這問題而害怕別人把自己看成無法自制的?</p>
-        <input type="radio" name="section15" value="4" class="e_score"> 會<br>
-        <input type="radio" name="section15" value="0" class="e_score"> 不會<br>
-        <input type="radio" name="section15" value="2" class="e_score"> 有時會
-        <br><br><p>F16 這問題會不會使你難於獨自外出散步?</p>
-        <input type="radio" name="section16" value="4" class="f_score"> 會<br>
-        <input type="radio" name="section16" value="0" class="f_score"> 不會<br>
-        <input type="radio" name="section16" value="2" class="f_score"> 有時會
-        <br><br><p>P17 在行人道上走路會不會使問題惡化?</p>
-        <input type="radio" name="section17" value="4" class="p_score"> 會<br>
-        <input type="radio" name="section17" value="0" class="p_score"> 不會<br>
-        <input type="radio" name="section17" value="2" class="p_score"> 有時會
-        <br><br><p>E18 這問題會不會使你難於集中精神?</p>
-        <input type="radio" name="section18" value="4" class="e_score"> 會<br>
-        <input type="radio" name="section18" value="0" class="e_score"> 不會<br>
-        <input type="radio" name="section18" value="2" class="e_score"> 有時會
-        <br><br><p>E19 這問題會不會使你難於在漆黑的房子裡走動?</p>
-        <input type="radio" name="section19" value="4" class="e_score"> 會<br>
-        <input type="radio" name="section19" value="0" class="e_score"> 不會<br>
-        <input type="radio" name="section19" value="2" class="e_score"> 有時會
-        <br><br><p>E20 這問題會不會使你難於害怕獨自留在家中?</p>
-        <input type="radio" name="section20" value="4" class="e_score"> 會<br>
-        <input type="radio" name="section20" value="0" class="e_score"> 不會<br>
-        <input type="radio" name="section20" value="2" class="e_score"> 有時會
-        <br><br><p>E21 這問題會不會使你覺得自己的身體有缺憾?</p>
-        <input type="radio" name="section21" value="4" class="e_score"> 會<br>
-        <input type="radio" name="section21" value="0" class="e_score"> 不會<br>
-        <input type="radio" name="section21" value="2" class="e_score"> 有時會
-        <br><br><p>E22 這問題有沒有曾經影響你與家人或朋友的關係?</p>
-        <input type="radio" name="section22" value="4" class="e_score"> 有<br>
-        <input type="radio" name="section22" value="0" class="e_score"> 沒有<br>
-        <input type="radio" name="section22" value="2" class="e_score"> 有時有
-        <br><br><p>E23 這問題會不會使你沮喪?</p>
-        <input type="radio" name="section23" value="4" class="e_score"> 會<br>
-        <input type="radio" name="section23" value="0" class="e_score"> 不會<br>
-        <input type="radio" name="section23" value="2" class="e_score"> 有時會
-        <br><br><p>F24 這問題會不會妨礙你工作或做家務?</p>
-        <input type="radio" name="section24" value="4" class="f_score"> 會<br>
-        <input type="radio" name="section24" value="0" class="f_score"> 不會<br>
-        <input type="radio" name="section24" value="2" class="f_score"> 有時會
-        <br><br><p>P25 向前彎腰會不會使問題惡化?</p>
-        <input type="radio" name="section25" value="4" class="p_score"> 會<br>
-        <input type="radio" name="section25" value="0" class="p_score"> 不會<br>
-        <input type="radio" name="section25" value="2" class="p_score"> 有時會
+		<p>本問卷的目的，是了解你的髖關節如何影響你應付日常生活的能力。</p>
+
+		<p>請回答所有的問題，並在每題選擇一個是你認為最貼切地描述你現況的答案。</p>
         <br>
-			
-        <br><br>
-		<div id="p_result"></div>
-		<div id="F_result"></div>
-		<div id="E_result"></div>
+			<strong>問題1   疼痛程度評估</strong>
+            <br>
+			<input type="radio" name="section1" value="44" class="score"> 完全不感疼痛或可忽略
+            <br>
+			<input type="radio" name="section1" value="40" class="score"> 輕微或偶發性疼痛，活動量减少
+            <br>
+			<input type="radio" name="section1" value="30" class="score"> 輕度疼痛，平均活動時間不受影響，平時活動很少出現中度疼痛，可服用止痛藥改善症狀
+            <br>
+			<input type="radio" name="section1" value="20" class="score"> 中度疼痛，可以忍受；會因疼痛開始影響即限制平時活動或工作，常需
+            使用止痛藥，但已難達改善症狀之效果
+            <br>
+			<input type="radio" name="section1" value="10" class="score"> 嚴重疼痛，嚴重影響工作與活動
+            <br>
+            <input type="radio" name="section1" value="0" class="score"> 完全癱痪、殘廢，臥床於床上
+			<br><br><p><strong>問題2   跛行程度評估</strong></p>
+			<input type="radio" name="section2" value="11" class="score"> 完全不會
+            <br>
+			<input type="radio" name="section2" value="8" class="score"> 輕微跛行
+            <br>
+			<input type="radio" name="section2" value="5" class="score"> 中度跛行
+            <br>
+			<input type="radio" name="section2" value="0" class="score"> 嚴重跛行
+			<br><br><p><strong>問題3   輔助程度評估</strong></p>
+			<input type="radio" name="section3" value="11" class="score"> 完全不需要
+            <br>
+			<input type="radio" name="section3" value="7" class="score"> 長距離行走時才會使用1支手杖(stick)
+            <br>
+			<input type="radio" name="section3" value="5" class="score"> 大部分時間都會使用1支手杖(stick)
+            <br>
+			<input type="radio" name="section3" value="3" class="score"> 使用1支枴杖(one crutch, quadripod, single EC, AC)
+            <br>
+			<input type="radio" name="section3" value="2" class="score"> 使用2支手杖(stick+quadripod)
+            <br>
+            <input type="radio" name="section3" value="0" class="score"> 使用2支拐杖或完全無法行走(2 crutches, frame, rollator)
+			<br><br><p><strong>問題4   行走距離評估</strong></p>
+			<input type="radio" name="section4" value="11" class="score"> 完全無限制
+            <br>
+			<input type="radio" name="section4" value="8" class="score"> ~6個街口(12.5 mins)
+            <br>
+			<input type="radio" name="section4" value="5" class="score"> 2或3個街口(4-6.25mins)
+            <br>
+			<input type="radio" name="section4" value="2" class="score"> 足不出戶
+            <br>
+			<input type="radio" name="section4" value="0" class="score"> 僅臥在床或椅上
+			<br><br><p><strong>問題5 就坐舒適程度</strong></p>
+			<input type="radio" name="section5" value="5" class="score"> 可舒適的坐在椅子上達1小時
+            <br>
+			<input type="radio" name="section5" value="3" class="score"> 在高腳椅上可坐30分鐘
+            <br>
+			<input type="radio" name="section5" value="0" class="score"> 完全無法坐上椅子上休息
+			<br><br><p><strong>問題6 可否搭乘交通工具</strong></p>
+			<input type="radio" name="section6" value="1" class="score"> 可自行搭乘
+            <br>
+			<input type="radio" name="section6" value="0" class="score"> 不可自行搭乘
+			<br><br><p><strong>問題7  上下樓梯功能評估</strong></p>
+			<input type="radio" name="section7" value="4" class="score"> 正常上下樓不需扶手幫助
+            <br>
+			<input type="radio" name="section7" value="2" class="score"> 正常上下樓需扶手幫助
+            <br>
+			<input type="radio" name="section7" value="1" class="score"> 需以其他方式輔助上下樓
+            <br>
+			<input type="radio" name="section7" value="0" class="score"> 完全無法上下樓
+			<br><br><p><strong>問題8 穿脫襪子及鞋子能力</strong></p>
+			<input type="radio" name="section8" value="4" class="score"> 輕鬆做到穿脫襪子及鞋子
+            <br>
+			<input type="radio" name="section8" value="2" class="score"> 困難執行穿脫襪子及鞋子
+            <br>
+			<input type="radio" name="section8" value="0" class="score"> 完全沒辦法做到
+			<br>
+
+		<br>
+		<div id="result"></div>
 		<br>
 		<div class="button-container">
 			<input type="reset" value="重設" onclick="resetContent()"> 
-			<button type="button" class="btn-primary" onclick="runALLFunctions(event)">計算</button>
+			<button type="button" class="btn-primary" onclick="calculateQuickDASH(event)">計算</button>
 		</div>
 		<br>
 		<div class="centered-text">
-			<h1>謝謝您完成問卷</h1>
-		</div>
-		<div id="create">
+		  <h1>謝謝您完成問卷</h1>
+	  	</div>
+		  <div id="create">
 			<p>威爾斯親王醫院物理治療部制作</p>
 		</div>
-
 	</form>
-    <div id="popup">
+	<div id="popup">
 		<div class="popup-content">
 		  <div class="popup-message"></div>
 		  <button class="popup-button">確定</button>
